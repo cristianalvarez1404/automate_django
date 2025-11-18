@@ -1,29 +1,48 @@
 import csv
 from django.core.management.base import BaseCommand
 from dataentry.models import Student
+from django.apps import apps
 import datetime
 
-#propsed command = python manage.py exportdata
+#propsed command = python manage.py exportdata model_name
 
 class Command(BaseCommand):
-  help = 'Export data from Student model to a CSV file'
+  help = 'Export data from the database to a CSV file'
+
+  def add_arguments(self, parser):
+    parser.add_argument("model_name",type=str, help="Model name")
   
   def handle(self, *args, **kwargs):
+    model_name = kwargs['model_name']
+
+    # search through all the install apps for the model
+    model = None
+    for app_config in apps.get_app_configs():
+      try:
+        model = apps.get_model(app_config.label, model_name)      
+        break # stop executing once the model is found
+      except LookupError as e:
+        pass
+    
+    if not model:
+      self.stderr.write(f"Model {model_name} could not found")
+      return
+    
     # fetch the data from the database
-    students = Student.objects.all()
+    data = model.objects.all()
     
     # generate the timestamp of current date and time
     timestamp = datetime.datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
     
     # define the csv file name/path
-    file_path = f'exported_students_data_{timestamp}.csv'
+    file_path = f'exported_{model_name}_data_{timestamp}.csv'
     
     # open the csv file and write the data
     with open(file_path, 'w', newline='') as file:
       writer = csv.writer(file)
       
       # write the CSV header
-      writer.writerow(['Roll No', 'Name', 'Age'])
+      writer.writerow([])
       
       # write data rows
       for student in students:
