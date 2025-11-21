@@ -13,7 +13,7 @@ class Command(BaseCommand):
     parser.add_argument("model_name",type=str, help="Model name")
   
   def handle(self, *args, **kwargs):
-    model_name = kwargs['model_name']
+    model_name = kwargs['model_name'].capitalize()
 
     # search through all the install apps for the model
     model = None
@@ -42,10 +42,12 @@ class Command(BaseCommand):
       writer = csv.writer(file)
       
       # write the CSV header
-      writer.writerow([])
+      # we want to print the field names of the model that we are trying to export
+
+      writer.writerow([field.name for field in model._meta.fields])
       
       # write data rows
-      for student in students:
-        writer.writerow([student.roll_no, student.name, student.age])
+      for dt in data:
+        writer.writerow([getattr(dt, field.name) for field in model._meta.fields])
         
     self.stdout.write(self.style.SUCCESS("Data exported successfully! ✨🎉"))

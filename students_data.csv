@@ -1,9 +1,4 @@
-Roll No,Name,Age
-1002,Name 1,18
-1003,Name 2,19
-1004,Name 3,20
-1005,Name 4,45
-1006,Name 5,52
+roll_no,name,age
 STU1001,Bob,21
 STU1002,Bob,20
 STU1003,Fiona,25
