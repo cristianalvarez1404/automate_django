@@ -41,7 +41,7 @@ class Command(BaseCommand):
         raise DataError(f"CSV file doesn't match with the {model_name} table fields.")
 
       for row in reader:
-        student_exists = model.objects.filter(roll_no = row['roll_no']).exists()
+        student_exists = model.objects.filter(employee_id = row['employee_id']).exists()
         if not student_exists:
           model.objects.create(**row)
           
