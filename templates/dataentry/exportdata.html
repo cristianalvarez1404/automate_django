@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Automate the boring stuff with Django</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+  </head>
+  <body>
+    <div class="container">
+      <h3 class="text-center mt-5">Export data from database tables</h3>
+      <form action="{% url 'export_data' %}" method="POST" style="max-width: 600px; margin:auto">
+        {% csrf_token %}
+        <div class="form-group">
+          <label for="model_name">Select Database table</label>
+          <select name="model_name" class="form-control" required>
+            <option value="" selected disabled>Select</option>
+            {% for model in custom_models %}
+              <option value="{{ model }}">{{ model }}</option>
+            {% endfor%}
+          </select>
+        </div>
+        <input type="submit" value="Export data" class="btn btn-primary mt-5">
+
+        {% include 'alert.html' %}
+      </form>
+    </div>
+  <body>
+</html>
